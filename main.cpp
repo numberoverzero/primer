@@ -1,34 +1,42 @@
 #include <bitset>
-#include <iostream>
-#include <bits.h>
+#include <solver.h>
+#include <debugging.h>
 
-static int counter = 0;
-template <typename T>
-void render_any(T t) { std::cout << counter++ << " " << t << std::endl; }
-void render_bits(uint32_t x) { render_any(std::bitset<32>(x)); }
-void render_bool(bool t) { render_any(t? "true" : "false"); }
-void render(uint8_t t) { render_any(unsigned(t)); }
-void render(uint32_t t) { render_any(unsigned(t)); }
 
+enum TEST {
+    VERY_FAST, FAST, SLOW, VERY_SLOW, DIFFERENT_LENGTHS
+};
 
 int main() {
-    uint32_t n = 0b101001;
-    uint32_t nrev = reverse(n);
-    uint32_t nrev_left = keep_left(nrev, 5);
-    uint32_t n2 = reverse(nrev_left);
-    uint32_t n2_left = keep_left(n2, 5);
-    render_bits(n);
-    render_bits(nrev);
-    render_bits(nrev_left);
-    render_bits(n2);
-    render_bits(n2_left);
-    render_bool(n == n2_left);
-    uint8_t t = diagonal_multiply(0b111101100, 0b101010101, 7);
-    // 11101100
-    // 10101010 (from reversed 01010101)
-    // --------
-    // 11101000
-    render(t);
-    render (((uint32_t)0) - ((uint32_t)1));
+    uint64_t p, q;
+    TEST test = VERY_FAST;
+    switch(test) {
+        case VERY_FAST:  // very fast
+            p = 17209;
+            q = 21227;
+            break;
+        case FAST:  // fast
+            p = 1000211;
+            q = 1000121;
+            break;
+        case SLOW:  // slow
+            p = 4346821;
+            q = 4346831;
+            break;
+        case VERY_SLOW:  // very slow
+            p = 15485863;
+            q = 15485857;
+            break;
+        case DIFFERENT_LENGTHS:  // different lengths
+            p = 15449411;
+            q = 8975063;
+            break;
+        default: return 1;
+    }
+    Solution s = solve(p*q);
+    render_any("ACTUAL");
+    render(p); render(q);
+    render_any("EXPECTED");
+    render(s.p); render(s.q);
     return 0;
 }
