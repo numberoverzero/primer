@@ -22,17 +22,16 @@ inline uint32_t carry(uint32_t x) { return x >> 1; }
 inline uint32_t remainder(uint32_t x) { return x & 1; }
 
 
-
-typedef uint32_t (*BitMaskFunction) (uint32_t &buffer, uint8_t pos);
+typedef uint32_t (*BitMaskFunction) (uint32_t buffer, uint8_t pos);
 
 /// Set a bit in the buffer to 1;
 /// \param buffer
 /// \param pos index from right to set to 1
-inline uint32_t one_at(uint32_t &buffer, uint8_t pos) { buffer |= ONE_MASKS[pos]; return 1;}
+inline uint32_t one_at(uint32_t buffer, uint8_t pos) { return buffer | ONE_MASKS[pos]; }
 /// Set a bit in the buffer to 0;
 /// \param buffer
 /// \param pos index from right to set to 0
-inline uint32_t zero_at(uint32_t &buffer, uint8_t pos) { buffer &= ZERO_MASKS[pos]; return 0;}
+inline uint32_t zero_at(uint32_t buffer, uint8_t pos) { return buffer & ZERO_MASKS[pos]; }
 
 
 /// 3bit index: xyz
@@ -75,12 +74,6 @@ inline uint32_t zero_at(uint32_t &buffer, uint8_t pos) { buffer &= ZERO_MASKS[po
 /// PERMUTE_FUNCTIONS[(x&1)<<2 | y<<1 | 0](&p, pos)
 /// PERMUTE_FUNCTIONS[(x&1)<<2 | y<<1 | 1](&q, pos)
 extern const BitMaskFunction PERMUTE_FUNCTIONS[];
-
-inline uint32_t apply_permutation(uint32_t x, uint8_t y, uint32_t &p, uint32_t &q, uint8_t pos) {
-    return
-        PERMUTE_FUNCTIONS[(x&1)<<2 | y<<1 | 0](p, pos) +
-        PERMUTE_FUNCTIONS[(x&1)<<2 | y<<1 | 1](q, pos);
-};
 
 /// Return the bit in the given position
 /// \example (0b00..001101010000, 8) -> 1

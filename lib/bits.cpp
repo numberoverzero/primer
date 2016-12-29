@@ -4,10 +4,11 @@
 // http://stackoverflow.com/a/746203
 uint32_t reverse(uint32_t input) {
     // TODO Use http://stackoverflow.com/a/24058332
-    uint32_t c = (BIT_REVERSE_TABLE[input & 0xff] << 24) |
-                 (BIT_REVERSE_TABLE[(input >> 8) & 0xff] << 16) |
-                 (BIT_REVERSE_TABLE[(input >> 16) & 0xff] << 8) |
-                 (BIT_REVERSE_TABLE[(input >> 24) & 0xff]);
+    uint32_t c =
+            (BIT_REVERSE_TABLE[ input        & 0xff] << 24) |
+            (BIT_REVERSE_TABLE[(input >>  8) & 0xff] << 16) |
+            (BIT_REVERSE_TABLE[(input >> 16) & 0xff] <<  8) |
+            (BIT_REVERSE_TABLE[(input >> 24) & 0xff]);
     return c;
 }
 
