@@ -1,4 +1,4 @@
-extern const unsigned char BIT_REVERSE_TABLE[256];
+extern const uint8_t BIT_REVERSE_TABLE[256];
 
 
 /// to set bit p in buffer to 1, use buffer |= ONE_MASKS[p]
