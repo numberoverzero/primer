@@ -9,5 +9,5 @@ set(
     lib/lookups.cpp
     lib/bits.cpp
 
-        lib/solver.cpp lib/solver.h lib/constants.h)
+        lib/solver.cpp lib/solver.h lib/constants.h lib/debugging.h)
 add_executable(primer ${SOURCE_FILES})
