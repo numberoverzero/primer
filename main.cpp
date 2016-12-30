@@ -1,4 +1,3 @@
-#include <bitset>
 #include <solver.h>
 #include <iostream>
 
