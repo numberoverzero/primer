@@ -8,13 +8,13 @@ typedef uint64_t (*BitMaskFunction) (uint64_t buffer, uint8_t pos);
 /// Set a bit in the buffer to 1;
 /// \param buffer
 /// \param pos index from right to set to 1
-inline uint64_t one_at(uint64_t buffer, uint8_t pos) { return buffer | (1ull << pos); }
+uint64_t one_at(uint64_t buffer, uint8_t pos) { return buffer | (1ull << pos); }
 
 
 /// Set a bit in the buffer to 0;
 /// \param buffer
 /// \param pos index from right to set to 0
-inline uint64_t zero_at(uint64_t buffer, uint8_t pos) { return buffer & ~(1ull << pos); }
+uint64_t zero_at(uint64_t buffer, uint8_t pos) { return buffer & ~(1ull << pos); }
 
 
 /// 3bit index: xyz
