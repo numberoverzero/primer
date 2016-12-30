@@ -1,5 +1,4 @@
 #include <fstream>
-#include <iostream>
 #include <iomanip>
 
 using namespace std;
@@ -40,12 +39,14 @@ inline uint32_t reverse(uint32_t input) {
 }
 
 int main() {
-    SOURCE.open("../lib/reverse.h", ofstream::out | ofstream::trunc);
+    SOURCE.open("lib/reverse.h", ofstream::out | ofstream::trunc);
+    if(SOURCE.fail()) return 1;
+
     SOURCE << "// GENERATED FILE, DO NOT MODIFY.\n";
-    SOURCE << "// source: ../codegen/uint32_t_reverse.cpp\n";
+    SOURCE << "// source: ../applications/build_lookup.cpp\n";
     SOURCE << "// =======================================\n";
-    SOURCE << "const uint64_t BIT_REVERSE_TABLE[2<<" << BITS << "] = {";
-    SOURCE << hex;
+    SOURCE << "#pragma once\n";
+    SOURCE << "const uint64_t BIT_REVERSE_TABLE[2<<" << BITS << "] = {" << hex;
     for(uint32_t i=0; i < (1<<BITS); i++) {
         if (i%16 == 0) SOURCE << "\n    ";
         SOURCE
