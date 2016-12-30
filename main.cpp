@@ -1,6 +1,6 @@
 #include <bitset>
 #include <solver.h>
-#include <debugging.h>
+#include <iostream>
 
 
 int main(int argc, char *argv[]) {

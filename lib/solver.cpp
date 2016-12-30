@@ -75,7 +75,7 @@ Solution solve(uint64_t goal) {
             continue;
         }
 
-        pq = (uint64_t) state.p * (uint64_t) state.q;
+        pq = state.p * state.q;
 
         if (pq > goal) continue;  // Try next permutation, same position
         else if (pq < goal) state.pos++; // Move on to next digit

@@ -5,11 +5,11 @@
 
 /// create a mask to drop leftmost [0:pos] bits
 /// \example mask(3) -> 00..001111
-inline uint64_t mask(uint8_t pos) { return ALL_ONE >> (31 - pos); }
+inline uint64_t mask(uint8_t pos) { return ALL_ONE >> (63 - pos); }
 
 /// keep the leftmost [0:pos] bits
 /// \example (1010100..00, 3) -> 00..001010
-inline uint64_t keep_left(uint64_t x, uint8_t pos) { return x >> (31 - pos); }
+inline uint64_t keep_left(uint64_t x, uint8_t pos) { return x >> (63 - pos); }
 
 /// returns all but the LSB from x (equiv. x >> 1)
 /// note that  x != carry(x) + remainder(x)

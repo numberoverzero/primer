@@ -4,12 +4,16 @@
 // http://stackoverflow.com/a/746203
 uint64_t reverse(uint64_t input) {
     // TODO Use http://stackoverflow.com/a/24058332
-    uint64_t c =
-            (BIT_REVERSE_TABLE[ input        & 0xff] << 24) |
-            (BIT_REVERSE_TABLE[(input >>  8) & 0xff] << 16) |
-            (BIT_REVERSE_TABLE[(input >> 16) & 0xff] <<  8) |
-            (BIT_REVERSE_TABLE[(input >> 24) & 0xff]);
-    return c;
+    return
+            (BIT_REVERSE_TABLE[ input        & 0xff] << 56) |
+            (BIT_REVERSE_TABLE[(input >>  8) & 0xff] << 48) |
+            (BIT_REVERSE_TABLE[(input >> 16) & 0xff] << 40) |
+            (BIT_REVERSE_TABLE[(input >> 24) & 0xff] << 32) |
+            (BIT_REVERSE_TABLE[(input >> 32) & 0xff] << 24) |
+            (BIT_REVERSE_TABLE[(input >> 40) & 0xff] << 16) |
+            (BIT_REVERSE_TABLE[(input >> 48) & 0xff] <<  8) |
+            (BIT_REVERSE_TABLE[(input >> 56) & 0xff]      )
+    ;
 }
 
 
