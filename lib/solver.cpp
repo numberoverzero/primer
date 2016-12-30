@@ -30,7 +30,7 @@ inline bool advance (Partial &state) {
     return true;
 }
 
-inline void reverse(Partial &state) {
+inline void pop(Partial &state) {
     // TODO | be careful of overflow when pos (uint8_t) can wrap on bit length (p, q > 254 bits)
     // TODO | otherwise, we'll end up zeroing the first digit (p_0, q_0)
     state.p &= ~(1ull << state.pos);
@@ -44,7 +44,7 @@ Solution solve(uint64_t goal) {
 
     while (state.pos > 0) {
         if (!advance(state)) {
-            reverse(state);
+            pop(state);
             continue;
         }
 
