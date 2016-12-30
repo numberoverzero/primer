@@ -1,37 +1,20 @@
 #include <cstdint>
-#include "constants.h"
-#include "lookups.h"
-
-
-/// create a mask to drop leftmost [0:pos] bits
-/// \example mask(3) -> 00..001111
-inline uint64_t mask(uint8_t pos) { return ALL_ONE >> (63 - pos); }
-
-/// keep the leftmost [0:pos] bits
-/// \example (1010100..00, 3) -> 00..001010
-inline uint64_t keep_left(uint64_t x, uint8_t pos) { return x >> (63 - pos); }
-
-/// returns all but the LSB from x (equiv. x >> 1)
-/// note that  x != carry(x) + remainder(x)
-/// but rather x == carry(x) << 1 + remainder(x)
-/// \example 00..011101101101 -> 00..001110110110
-inline uint64_t carry(uint64_t x) { return x >> 1; }
-
-/// returns the LSB from x (equiv x & 1)
-/// \example 00..0111001101101 -> 00..0000000000001
-inline uint64_t remainder(uint64_t x) { return x & 1; }
+#include "reverse.h"
 
 
 typedef uint64_t (*BitMaskFunction) (uint64_t buffer, uint8_t pos);
 
+
 /// Set a bit in the buffer to 1;
 /// \param buffer
 /// \param pos index from right to set to 1
-inline uint64_t one_at(uint64_t buffer, uint8_t pos) { return buffer | ONE_MASKS[pos]; }
+inline uint64_t one_at(uint64_t buffer, uint8_t pos) { return buffer | (1ull << pos); }
+
+
 /// Set a bit in the buffer to 0;
 /// \param buffer
 /// \param pos index from right to set to 0
-inline uint64_t zero_at(uint64_t buffer, uint8_t pos) { return buffer & ZERO_MASKS[pos]; }
+inline uint64_t zero_at(uint64_t buffer, uint8_t pos) { return buffer & ~(1ull << pos); }
 
 
 /// 3bit index: xyz
@@ -73,7 +56,17 @@ inline uint64_t zero_at(uint64_t buffer, uint8_t pos) { return buffer & ZERO_MAS
 /// Step 3: apply function at index
 /// PERMUTE_FUNCTIONS[(x&1)<<2 | y<<1 | 0](&p, pos)
 /// PERMUTE_FUNCTIONS[(x&1)<<2 | y<<1 | 1](&q, pos)
-extern const BitMaskFunction PERMUTE_FUNCTIONS[];
+extern const BitMaskFunction PERMUTE_FUNCTIONS[8] = {
+        zero_at, // 000
+        zero_at, // 001
+        one_at,  // 010
+        one_at,  // 011
+        zero_at, // 100
+        one_at,  // 101
+        one_at,  // 110
+        zero_at  // 111
+};
+
 
 /// Return the bit in the given position
 /// \example (0b00..001101010000, 8) -> 1
@@ -84,7 +77,22 @@ inline uint64_t bit_at(uint64_t x, uint8_t pos) { return (x >> pos) & 1; }
 /// \param input number to reverse
 /// \return the reversed int
 /// \example 00..00010110111 -> 11101101000..00
-uint64_t reverse(uint64_t input);
+inline uint64_t reverse(uint64_t input) {
+    // TODO Use http://stackoverflow.com/a/24058332
+    return
+            (BIT_REVERSE_TABLE[ input        & 0xffff] << 48) |
+            (BIT_REVERSE_TABLE[(input >> 16) & 0xffff] << 32) |
+            (BIT_REVERSE_TABLE[(input >> 32) & 0xffff] << 16) |
+            (BIT_REVERSE_TABLE[(input >> 48) & 0xffff]        )
+    ;
+}
+
+
+/// keep the leftmost [0:pos] bits
+/// \example (1010100..00, 3) -> 00..001010
+inline uint64_t keep_left(uint64_t x, uint8_t pos) { return x >> (63 - pos); }
+
+
 /// Sum of the products of the diagonals in the first pos bits of two numbers.
 /// \param p first partial
 /// \param q second partial
@@ -92,4 +100,9 @@ uint64_t reverse(uint64_t input);
 /// \return [0, pos] depending on input values.
 /// \example (0b011101101, 0b101010110, 7) -> 2
 ///          note that the left most bit was discarded since only 8 are used.
-uint8_t diagonal_multiply(uint64_t p, uint64_t q, uint8_t pos);
+inline uint8_t diagonal_multiply(uint64_t p, uint64_t q, uint8_t pos) {
+    // sum(1 -> pos, p_i * q_(pos+1-i))
+    // reverse bits in q, then and p, q together
+    q = reverse(q);
+    return __builtin_popcount(p & keep_left(q, pos));
+}

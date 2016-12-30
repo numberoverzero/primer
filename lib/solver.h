@@ -1,5 +1,4 @@
 #include <cstdint>
-#include "constants.h"
 
 struct Partial {
     uint64_t p, q;

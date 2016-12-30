@@ -1,4 +1,3 @@
-#include <bitset>
 #include "solver.h"
 #include "bits.h"
 
@@ -51,7 +50,7 @@ inline bool advance (Partial &state) {
     // find this permutation's p_i, q_i and add them to R_i
     R_i = apply_permutation(state, R_i, c_i, s_i, permutation);
     // carry over all but s_i for the next iteration
-    state.carry[state.pos] = carry(R_i + c_i);
+    state.carry[state.pos] = (R_i + c_i) >> 1;
 
     return true;
 }
@@ -77,10 +76,9 @@ Solution solve(uint64_t goal) {
 
         pq = state.p * state.q;
 
-        if (pq > goal) continue;  // Try next permutation, same position
-        else if (pq < goal) state.pos++; // Move on to next digit
-        else if (state.p != 1 && state.q != 1) return Solution{.p=state.p, .q=state.q};  // Non-trivial decomposition
+        if (pq < goal) state.pos++; // Move on to next digit
+        else if (pq > goal) continue;  // Try next permutation, same position
+        else if ((state.p | state.q) != pq) return Solution{.p=state.p, .q=state.q};  // Non-trivial decomposition
     }
     return Solution{0, 0};
 }
-
