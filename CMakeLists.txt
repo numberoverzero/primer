@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 project(primer)
-include_directories(codegen)
+include_directories(applications)
 include_directories(lib)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -13,4 +13,5 @@ set(SOURCE_FILES
         lib/solver.h
 )
 add_executable(primer applications/primer.cpp ${SOURCE_FILES})
-add_executable(build-lookup applications/build_lookup.cpp ${SOURCE_FILES})
+add_executable(build-lookup applications/build_lookup.cpp)
+add_executable(scratchpad applications/scratchpad.cpp ${SOURCE_FILES})
