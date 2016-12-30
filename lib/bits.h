@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstdint>
 #include "reverse.h"
 
@@ -8,13 +10,13 @@ typedef uint64_t (*BitMaskFunction) (uint64_t buffer, uint8_t pos);
 /// Set a bit in the buffer to 1;
 /// \param buffer
 /// \param pos index from right to set to 1
-uint64_t one_at(uint64_t buffer, uint8_t pos) { return buffer | (1ull << pos); }
+inline uint64_t one_at(uint64_t buffer, uint8_t pos) { return buffer | (1ull << pos); }
 
 
 /// Set a bit in the buffer to 0;
 /// \param buffer
 /// \param pos index from right to set to 0
-uint64_t zero_at(uint64_t buffer, uint8_t pos) { return buffer & ~(1ull << pos); }
+inline uint64_t zero_at(uint64_t buffer, uint8_t pos) { return buffer & ~(1ull << pos); }
 
 
 /// 3bit index: xyz
@@ -81,7 +83,7 @@ const uint64_t PERMUTE_OFFSET[4] = {0, 2, 1, 1};
 /// \return the reversed int
 /// \example 00..00010110111 -> 11101101000..00
 inline uint64_t reverse(uint64_t input) {
-    // TODO Use http://stackoverflow.com/a/24058332
+    // TODO Use http://stackoverflow.com/a/24058332 when p, q > 64 bits
     return
             (BIT_REVERSE_TABLE[ input        & 0xffff] << 48) |
             (BIT_REVERSE_TABLE[(input >> 16) & 0xffff] << 32) |
