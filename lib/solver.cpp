@@ -7,8 +7,8 @@
 // r_i = R_i + (r_(i-1) >> 1) = R_i + c_i
 // s_i = r_i & 1 = remainder(r_i)
 
-inline uint32_t apply_permutation(Partial &state,
-                              uint32_t R_i, uint32_t c_i, uint32_t s_i,  // x
+inline uint64_t apply_permutation(Partial &state,
+                              uint64_t R_i, uint64_t c_i, uint64_t s_i,  // x
                               uint8_t permute_index) {
     uint64_t x = R_i ^ c_i ^ s_i;
     state.p = PERMUTE_FUNCTIONS[(x&1)<<2 | permute_index<<1 | 0](state.p, state.pos);
@@ -33,7 +33,7 @@ inline bool advance (Partial &state) {
     // Luckily, p_0 and q_0 are always 1 which lets us simply add the permutation to
     // finding the new carry.
 
-    uint32_t R_i;
+    uint64_t R_i;
     if (state.pos > 1) {
         R_i = diagonal_multiply(state.p >> 1, state.q >> 1, (uint8_t) (state.pos - 2));
     } else {
@@ -43,10 +43,10 @@ inline bool advance (Partial &state) {
 
     // carry(r_(i_1))
     // invariants: state.pos >= 1 and state.carry[0] is 0
-    uint32_t c_i = state.carry[state.pos - 1];
+    uint64_t c_i = state.carry[state.pos - 1];
 
     // get the goal's bit at this position
-    uint32_t s_i = bit_at((uint32_t) state.goal, state.pos);
+    uint64_t s_i = bit_at(state.goal, state.pos);
 
     // find this permutation's p_i, q_i and add them to R_i
     R_i = apply_permutation(state, R_i, c_i, s_i, permutation);

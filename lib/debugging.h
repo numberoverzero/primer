@@ -10,4 +10,4 @@ template <typename T>
 void render(T t) { render_any(unsigned(t)); }
 
 template <typename T>
-void render_bits(T t) { render_any(std::bitset<32>(t)); }
+void render_bits(T t) { render_any(std::bitset<64>(t)); }

@@ -2,9 +2,9 @@
 #include "bits.h"
 
 // http://stackoverflow.com/a/746203
-uint32_t reverse(uint32_t input) {
+uint64_t reverse(uint64_t input) {
     // TODO Use http://stackoverflow.com/a/24058332
-    uint32_t c =
+    uint64_t c =
             (BIT_REVERSE_TABLE[ input        & 0xff] << 24) |
             (BIT_REVERSE_TABLE[(input >>  8) & 0xff] << 16) |
             (BIT_REVERSE_TABLE[(input >> 16) & 0xff] <<  8) |
@@ -13,7 +13,7 @@ uint32_t reverse(uint32_t input) {
 }
 
 
-uint8_t diagonal_multiply(uint32_t p, uint32_t q, uint8_t pos) {
+uint8_t diagonal_multiply(uint64_t p, uint64_t q, uint8_t pos) {
     // TODO | bake this into a lookup table.
     // TODO | key will probably be (pos,p,q) where p,q are uint16_t
     // sum(1 -> pos, p_i * q_(pos+1-i))
