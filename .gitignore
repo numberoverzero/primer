@@ -52,14 +52,13 @@ docs/_build/
 # PyBuilder
 target/
 
+_build
+
 # pyenv
 .python-version
 
 # testing
 primes.txt
-
-cmake-build-debug
-cmake-build-release
 
 # profiling
 perf*
