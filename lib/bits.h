@@ -56,21 +56,24 @@ uint64_t zero_at(uint64_t buffer, uint8_t pos) { return buffer & ~(1ull << pos);
 /// Step 3: apply function at index
 /// PERMUTE_FUNCTIONS[(x&1)<<2 | y<<1 | 0](&p, pos)
 /// PERMUTE_FUNCTIONS[(x&1)<<2 | y<<1 | 1](&q, pos)
-extern const BitMaskFunction PERMUTE_FUNCTIONS[8] = {
+const BitMaskFunction PERMUTE_FUNCTIONS[8] = {
+                 //            x = R_i ^ c_i ^ s_i
         zero_at, // 000
-        zero_at, // 001
+        zero_at, // 001  (0,0) for x = 0 (adds 0 to R_i)
+
         one_at,  // 010
-        one_at,  // 011
+        one_at,  // 011  (1,1) for x = 0 (adds 2 to R_i)
+
         zero_at, // 100
-        one_at,  // 101
+        one_at,  // 101  (0,1) for x = 1 (adds 1 to R_i)
+
         one_at,  // 110
-        zero_at  // 111
+        zero_at  // 111  (1,0) for x = 1 (adds 1 to R_i)
 };
 
-
-/// Return the bit in the given position
-/// \example (0b00..001101010000, 8) -> 1
-inline uint64_t bit_at(uint64_t x, uint8_t pos) { return (x >> pos) & 1; }
+/// for an index into PERMUTE_FUNCTIONS, use index>>1 for PERMUTE_OFFSET
+/// so if index = [(x&1)<<2 | y<<1 | 1] then offset_index
+const uint64_t PERMUTE_OFFSET[4] = {0, 2, 1, 1};
 
 
 /// LSB -> MSB for an input that may be < 32 bits.
