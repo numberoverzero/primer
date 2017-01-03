@@ -19,9 +19,19 @@ struct Partial {
     };
 };
 
-typedef struct {
+struct Solution {
     uint64_t p;
     uint64_t q;
-} Solution;
+    uint64_t carry[64];
+    Solution(uint64_t p, uint64_t q, uint64_t carry[64]) : p{p}, q{q}
+    {
+        for(int i=0; i<64; i++) this->carry[i]=carry[i];
+    }
+
+    Solution(uint64_t p, uint64_t q) : p{p}, q{q}
+    {
+        for(int i=0; i<64; i++) this->carry[i]=0;
+    }
+};
 
 Solution solve(uint64_t product);

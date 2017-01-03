@@ -40,19 +40,12 @@ inline void pop(Partial &state) {
 
 Solution solve(uint64_t goal) {
     Partial state = {goal};
-    uint64_t pq;
-
-    while (state.pos > 0) {
-        if (!advance(state)) {
-            pop(state);
-            continue;
-        }
-
-        pq = state.p * state.q;
-
-        if (pq < goal) state.pos++; // Move on to next digit
-        else if (pq > goal) continue;  // Try next permutation, same position
-        else if ((state.p | state.q) != pq) return Solution{.p=state.p, .q=state.q};  // Non-trivial decomposition
+    uint64_t pq = 0;
+    while ((pq != goal) || state.p == 1 || state.q == 1) {
+        if (advance(state)) {
+            pq = state.p * state.q;
+            state.pos += pq < goal;
+        } else pop(state);
     }
-    return Solution{0, 0};
+    return Solution{.p=state.p, .q=state.q, .carry=state.carry};
 }
